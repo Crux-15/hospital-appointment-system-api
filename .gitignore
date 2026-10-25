@@ -1,0 +1,12 @@
+## Visual Studio / .NET .gitignore
+.vs/
+[Bb]in/
+[Oo]bj/
+*.user
+*.userosscache
+*.suo
+*.userprefs
+*.tmp
+*.log
+.DS_Store
+Thumbs.db
