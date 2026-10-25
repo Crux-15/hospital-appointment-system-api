@@ -6,29 +6,32 @@ namespace DAL.Repository
 {
     public class PatientRepo
     {
-        HospitalContext db;
+        HospitalContext? db;
+
+        public PatientRepo() { }
+
         public PatientRepo(HospitalContext db)
         {
             this.db = db;
         }
 
-        public List<Patient> Get()
+        public virtual List<Patient> Get()
         {
             return db.Patients.ToList();
         }
 
-        public Patient? Get(int id)
+        public virtual Patient? Get(int id)
         {
             return db.Patients.Find(id);
         }
 
-        public bool Create(Patient p)
+        public virtual bool Create(Patient p)
         {
             db.Patients.Add(p);
             return db.SaveChanges() > 0;
         }
 
-        public bool Update(Patient p)
+        public virtual bool Update(Patient p)
         {
             var exObj = db.Patients.Find(p.Id);
             if (exObj == null) return false;
@@ -40,7 +43,7 @@ namespace DAL.Repository
             return db.SaveChanges() > 0;
         }
 
-        public bool Delete(int id)
+        public virtual bool Delete(int id)
         {
             var data = db.Patients.Find(id);
             if (data == null) return false;

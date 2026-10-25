@@ -7,55 +7,58 @@ namespace BLL.Services
 {
     public class DoctorService
     {
-        DoctorRepo repo;
-        IMapper mapper;
+        DoctorRepo? repo;
+        IMapper? mapper;
+
+        public DoctorService() { }
+
         public DoctorService(DoctorRepo repo, IMapper mapper)
         {
             this.repo = repo;
             this.mapper = mapper;
         }
 
-        public List<DoctorModel> All()
+        public virtual List<DoctorModel> All()
         {
             var data = repo.Get();
             var mapped = mapper.Map<List<DoctorModel>>(data);
             return mapped;
         }
 
-        public DoctorModel GetById(int id)
+        public virtual DoctorModel? GetById(int id)
         {
             var data = repo.Get(id);
             var mapped = mapper.Map<DoctorModel>(data);
             return mapped;
         }
 
-        public List<DoctorAppointmentModel> GetWithAppointments()
+        public virtual List<DoctorAppointmentModel> GetWithAppointments()
         {
             var data = repo.GetWithAppointments();
             var mapped = mapper.Map<List<DoctorAppointmentModel>>(data);
             return mapped;
         }
 
-        public List<DoctorInfoModel> GetDoctorInfos()
+        public virtual List<DoctorInfoModel> GetDoctorInfos()
         {
             var data = repo.GetWithAppointments();
             var mapped = mapper.Map<List<DoctorInfoModel>>(data);
             return mapped;
         }
 
-        public bool Create(DoctorModel m)
+        public virtual bool Create(DoctorModel m)
         {
             var entity = mapper.Map<Doctor>(m);
             return repo.Create(entity);
         }
 
-        public bool Update(DoctorModel m)
+        public virtual bool Update(DoctorModel m)
         {
             var entity = mapper.Map<Doctor>(m);
             return repo.Update(entity);
         }
 
-        public bool Delete(int id)
+        public virtual bool Delete(int id)
         {
             return repo.Delete(id);
         }

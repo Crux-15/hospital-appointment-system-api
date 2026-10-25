@@ -1,12 +1,12 @@
 # 🏥 Hospital Appointment System — RESTful Web API
 
-A scalable, clean-architecture **Hospital Appointment Management System** built with **ASP.NET Core Web API**, **Entity Framework Core (Database-First)**, and **SQL Server**, strictly following the **3-Tier Architecture Pattern** (Presentation / Business Logic / Data Access Layer).
+A scalable, clean-architecture **Hospital Appointment Management System** built with **ASP.NET Core Web API**, **Entity Framework Core (Database-First)**, and **SQL Server**, strictly following the **3-Tier Architecture Pattern** (Presentation / Business Logic / Data Access Layer) and fully verified with **xUnit & Moq Unit Tests**.
 
 ---
 
 ## 🏛️ Architecture & Design Patterns
 
-The solution is divided into 3 decoupled layers to ensure separation of concerns and maintainability:
+The solution is divided into decoupled layers to ensure separation of concerns, testability, and maintainability:
 
 ```
 HospitalAppointmentSystem/
@@ -19,10 +19,14 @@ HospitalAppointmentSystem/
 │   ├── DTO / ViewModels (DoctorModel, DoctorInfoModel, PatientModel, AppointmentModel)
 │   └── AutoMapper Profile (MappingProfile.cs)
 │
-└── 🗄️ DAL (Data Access Layer)
-    ├── EF Core DbContext (HospitalContext.cs)
-    ├── Entities (Doctor, Patient, Appointment)
-    └── Repositories (DoctorRepo, PatientRepo, AppointmentRepo)
+├── 🗄️ DAL (Data Access Layer)
+│   ├── EF Core DbContext (HospitalContext.cs)
+│   ├── Entities (Doctor, Patient, Appointment)
+│   └── Repositories (DoctorRepo, PatientRepo, AppointmentRepo)
+│
+└── 🧪 HospitalAppointmentSystem.Tests (Unit Testing Layer)
+    ├── Services (DoctorServiceTests, AppointmentServiceTests, PatientServiceTests)
+    └── Controllers (DoctorControllerTests, AppointmentControllerTests)
 ```
 
 ### Key Design Patterns Implemented:
@@ -30,7 +34,7 @@ HospitalAppointmentSystem/
 * **Repository Pattern:** Encapsulates data access and queries (CRUD, complex LINQ filters, eager loading with `.Include()`).
 * **Dependency Injection (DI):** All repositories and services are registered in the DI container with scoped lifetimes.
 * **DTO & AutoMapper:** Strict mapping between database entities and API models using AutoMapper with custom projection (`ForMember`).
-* **LINQ Queries:** Expressive data retrieval for filtering appointments by date, doctor, patient, and status.
+* **Unit Testing & Mocking:** Unit tests using **xUnit** and **Moq** to isolate and verify business logic and HTTP action results without requiring database access.
 
 ---
 
@@ -40,7 +44,30 @@ HospitalAppointmentSystem/
 * **ORM:** Entity Framework Core 10 (SQL Server Provider)
 * **Database:** Microsoft SQL Server
 * **Mapping:** AutoMapper 14
+* **Unit Testing:** xUnit.net 2.9, Moq 4.20, Coverlet
 * **Documentation / Spec:** Microsoft.AspNetCore.OpenApi
+
+---
+
+## 🧪 Unit Testing Suite (xUnit & Moq)
+
+The project includes **20 comprehensive unit tests** covering the Business Logic Layer (Services) and the Presentation Layer (Controllers):
+
+| Test Suite | Focus / Scenarios Tested |
+|---|---|
+| **`DoctorServiceTests`** | Entity-to-DTO mapping, ID lookups, not-found null handling, AutoMapper `ForMember` appointment count computation, repository persistence delegation |
+| **`AppointmentServiceTests`** | Status filtering (`Pending`), date filtering (`Today`), status transitions (`Confirmed`/`Completed`), appointment booking creation |
+| **`PatientServiceTests`** | Patient retrieval, demographic mappings, new patient creation |
+| **`DoctorControllerTests`** | HTTP 200 `OkObjectResult` verification, payload type checking, controller-to-service isolation |
+| **`AppointmentControllerTests`** | Endpoint routing, status update actions, deletion actions |
+
+### Run Unit Tests:
+```powershell
+dotnet test
+```
+```text
+Passed!  - Failed: 0, Passed: 20, Skipped: 0, Total: 20, Duration: 734 ms
+```
 
 ---
 

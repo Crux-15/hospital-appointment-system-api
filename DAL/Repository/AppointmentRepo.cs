@@ -6,13 +6,16 @@ namespace DAL.Repository
 {
     public class AppointmentRepo
     {
-        HospitalContext db;
+        HospitalContext? db;
+
+        public AppointmentRepo() { }
+
         public AppointmentRepo(HospitalContext db)
         {
             this.db = db;
         }
 
-        public List<Appointment> Get()
+        public virtual List<Appointment> Get()
         {
             var data = db.Appointments
                 .Include(a => a.Doctor)
@@ -21,7 +24,7 @@ namespace DAL.Repository
             return data;
         }
 
-        public Appointment? Get(int id)
+        public virtual Appointment? Get(int id)
         {
             var data = db.Appointments
                 .Include(a => a.Doctor)
@@ -30,7 +33,7 @@ namespace DAL.Repository
             return data;
         }
 
-        public List<Appointment> GetByDoctor(int doctorId)
+        public virtual List<Appointment> GetByDoctor(int doctorId)
         {
             var data = (from a in db.Appointments
                         where a.DoctorId == doctorId
@@ -38,7 +41,7 @@ namespace DAL.Repository
             return data;
         }
 
-        public List<Appointment> GetByPatient(int patientId)
+        public virtual List<Appointment> GetByPatient(int patientId)
         {
             var data = (from a in db.Appointments
                         where a.PatientId == patientId
@@ -46,7 +49,7 @@ namespace DAL.Repository
             return data;
         }
 
-        public List<Appointment> GetPending()
+        public virtual List<Appointment> GetPending()
         {
             var data = (from a in db.Appointments
                         where a.Status == "Pending"
@@ -54,7 +57,7 @@ namespace DAL.Repository
             return data;
         }
 
-        public List<Appointment> GetToday()
+        public virtual List<Appointment> GetToday()
         {
             var today = DateTime.Today;
             var data = (from a in db.Appointments
@@ -63,13 +66,13 @@ namespace DAL.Repository
             return data;
         }
 
-        public bool Create(Appointment a)
+        public virtual bool Create(Appointment a)
         {
             db.Appointments.Add(a);
             return db.SaveChanges() > 0;
         }
 
-        public bool UpdateStatus(int id, string status)
+        public virtual bool UpdateStatus(int id, string status)
         {
             var exObj = db.Appointments.Find(id);
             if (exObj == null) return false;
@@ -77,7 +80,7 @@ namespace DAL.Repository
             return db.SaveChanges() > 0;
         }
 
-        public bool Update(Appointment a)
+        public virtual bool Update(Appointment a)
         {
             var exObj = db.Appointments.Find(a.Id);
             if (exObj == null) return false;
@@ -89,7 +92,7 @@ namespace DAL.Repository
             return db.SaveChanges() > 0;
         }
 
-        public bool Delete(int id)
+        public virtual bool Delete(int id)
         {
             var data = db.Appointments.Find(id);
             if (data == null) return false;
